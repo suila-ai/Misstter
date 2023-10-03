@@ -6,7 +6,7 @@ import { getCW, getLocalOnly, getScope, getSensitive, getServer, getToken } from
 import { Attachment } from '../../common/CommonType';
 
 const getTweetText = () => {
-  const textContents = document.querySelectorAll('div[data-testid="tweetTextarea_0"] div[data-block="true"]');
+  const textContents = document.querySelectorAll('div[data-testid="tweetTextarea_0"] div[data-block="true"],textarea[data-testid="tweetTextarea_0"]');
   if (!textContents) return;
   const text = Array.from(textContents).map((textContent) => {
     return textContent.textContent;
