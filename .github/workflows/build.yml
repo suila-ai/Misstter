@@ -1,0 +1,47 @@
+name: Build and release
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build for Chrome
+        run: npm run build_chrome
+
+      - name: Build for Firefox
+        run: npm run build_firefox
+
+      - name: Zip for Chrome
+        run: zip -r ../chrome.zip *
+        working-directory: dist/chrome
+
+      - name: Zip for Firefox
+        run: zip -r ../firefox.zip *
+        working-directory: dist/firefox
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/chrome.zip
+            dist/firefox.zip
